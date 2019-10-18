@@ -4,25 +4,25 @@
 
 ```
 git init --bare $HOME/.dotfiles
-alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-dotfiles config --local status.showUntrackedFiles no
-grep -q "alias dotfiles=" $HOME/.bashrc || echo "alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'" >> $HOME/.bashrc
-grep -q "alias dotfiles=" $HOME/.zshrc || echo "alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'" >> $HOME/.zshrc
+alias dotf='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+dotf config --local status.showUntrackedFiles no
+grep -q "alias dotf=" $HOME/.bashrc || echo "alias dotf='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'" >> $HOME/.bashrc
+grep -q "alias dotf=" $HOME/.zshrc || echo "alias dotf='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'" >> $HOME/.zshrc
 ```
 
 ## Versioning files in the project
 
-Wherever you are supposed to use `git` command use the `dotfiles` alias (defined above) instead. 
+Wherever you are supposed to use `git` command use the `dotf` alias (defined above) instead. 
 Set a `GIT_URL` env var to point to your .dotfiles project (*e.g.* GIT_URL=https://github.com/alsfreitaz/.dotfiles.git).
 
 ```
-dotfiles remote add origin $GIT_URL
-dotfiles status
-dotfiles add .zshrc
-dotfiles commit -m "Added .zshrc"
-dotfiles add .bashrc
-dotfiles commit -m "Added .bashrc"
-dotfiles push -u origin master
+dotf remote add origin $GIT_URL
+dotf status
+dotf add .zshrc
+dotf commit -m "Added .zshrc"
+dotf add .bashrc
+dotf commit -m "Added .bashrc"
+dotf push -u origin master
 ```
 
 ## Cloning the project to a new environment
@@ -32,8 +32,8 @@ Set a `GIT_URL` env var to point to your .dotfiles project (*e.g.* GIT_URL=https
 
 ```
 git clone --bare $GIT_URL $HOME/.dotfiles
-alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-dotfiles checkout
+alias dotf='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+dotf checkout
 ```
 
 > If you have an error message because of already existing files in your $HOME, you can either delete them or back them up and then retry cloning.

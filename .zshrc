@@ -21,6 +21,14 @@ alias ze="$EDITOR $HOME/.zshrc"
 CASE_SENSITIVE="false"
 HYPHEN_INSENSITIVE="true"
 
+# Installs Powerline fonts
+if [[ ! -d fonts ]] then
+  git clone https://github.com/powerline/fonts.git --depth=1
+  cd fonts
+  ./install.sh
+  cd -
+fi
+
 # Sets zsh theme
 ZSH_THEME="agnoster"
 

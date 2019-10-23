@@ -27,21 +27,26 @@ select_default_editor() {
   type nvim >/dev/null 2>&1 && nvim_present=$?
   # Checks if vim is present
   type vim >/dev/null 2>&1 && vim_present=$?
-  ## Checks if vi is present
+  # Checks if vi is present
   type vi >/dev/null 2>&1 && vi_present=$?
   (([[ $nvim_present -eq 0 ]] && echo "nvim" ) || ([[ $vim_present -eq 0 ]] && echo "vim") || ([[ $vi_present -eq 0 ]] && echo "vi"))
 }
 
-install_ohmyzsh_themes() {
-  # Downloads powerlevel10k theme to .oh-my-zsh themes folder
-  if [[ ! -d $ZSH_CUSTOM/themes/powerlevel10k ]]; then
-    git clone https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k
-  fi
+install_external_theme() {
+  case "$1" in 
+    "powerlevel10k/powerlevel10k")
+      # Downloads powerlevel10k theme to .oh-my-zsh themes folder
+      if [[ ! -d $ZSH_CUSTOM/themes/powerlevel10k ]]; then
+        git clone https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k
+      fi
+  esac
 }
 
 set_ohmyzsh_theme() {
   # Sets zsh theme
-  ZSH_THEME="agnoster"
+  ZSH_THEME="$1"
+  # Installs external theme to Oh My Zsh
+  install_external_theme ZSH_THEME
   # Defines which .oh-my-zsh plugins should be loaded 
   plugins=(git zsh-syntax-highlighting zsh-autosuggestions)
   # Loads Oh My ZSH
@@ -68,6 +73,16 @@ install_ohmyzsh_plugins() {
     git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
 }
 
+set_pyenv() {
+  # Checks if pyenv is present
+  type pyenv >/dev/null 2>&1
+  pyenv_present=$?
+  if [[ $pyenv_present -eq 0 ]] then
+    eval "$(pyenv init -)"
+    eval "$(pyenv virtualenv-init -)"
+  fi
+}
+
 CASE_SENSITIVE="false"
 HYPHEN_INSENSITIVE="true"
 
@@ -75,14 +90,6 @@ set_aliases
 install_fonts
 install_zsh_plugins
 install_ohmyzsh_plugins
-install_ohmyzsh_themes
-set_ohmyzsh_theme
-
-# Checks if pyenv is present
-type pyenv >/dev/null 2>&1
-pyenv_present=$?
-
-if [[ $pyenv_present -eq 0 ]] then
-  eval "$(pyenv init -)"
-  eval "$(pyenv virtualenv-init -)"
-fi
+# set_ohmyzsh_theme "powerlevel10k/powerlevel10k"
+set_ohmyzsh_theme "agnoster"
+set_pyenv

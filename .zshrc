@@ -8,7 +8,7 @@ set_aliases() {
   # Sources .zshrc
   alias zs="source $HOME/.zshrc"
   # nvim alias
-  alias nvim="flatpak run io.neovim.nvim"
+  alias nvim="$HOME/.local/bin/nvim"
   # default editor alias
   alias edit="nvim"
   # Opens .zshrc file for edit

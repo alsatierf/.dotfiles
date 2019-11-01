@@ -7,8 +7,12 @@ set_aliases() {
   alias dotf="git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
   # Sources .zshrc
   alias zs="source $HOME/.zshrc"
+  # nvim alias
+  alias nvim="flatpak run io.neovim.nvim"
+  # default editor alias
+  alias edit="nvim"
   # Opens .zshrc file for edit
-  alias ze="$(select_default_editor) $HOME/.zshrc"
+  alias ze="edit $HOME/.zshrc"
 }
 
 install_fonts() {
@@ -19,17 +23,6 @@ install_fonts() {
     ./install.sh
     cd -
   fi
-}
-
-# Exports the chosen command line editor
-select_default_editor() {
-  # Checks if nvim is present
-  type nvim >/dev/null 2>&1 && nvim_present=$?
-  # Checks if vim is present
-  type vim >/dev/null 2>&1 && vim_present=$?
-  # Checks if vi is present
-  type vi >/dev/null 2>&1 && vi_present=$?
-  (([[ $nvim_present -eq 0 ]] && echo "nvim" ) || ([[ $vim_present -eq 0 ]] && echo "vim") || ([[ $vi_present -eq 0 ]] && echo "vi"))
 }
 
 install_external_theme() {
@@ -74,13 +67,15 @@ install_ohmyzsh_plugins() {
 }
 
 set_pyenv() {
-  # Checks if pyenv is present
-  type pyenv >/dev/null 2>&1
-  pyenv_present=$?
-  if [[ $pyenv_present -eq 0 ]] then
+  if [[ -e "$HOME/.pyenv/bin/pyenv" ]] then
+    PATH="$HOME/.pyenv/bin:$PATH"
     eval "$(pyenv init -)"
     eval "$(pyenv virtualenv-init -)"
   fi
+}
+
+set_localbin_path() {
+  PATH="$HOME/.local/bin:$PATH"
 }
 
 CASE_SENSITIVE="false"
@@ -90,6 +85,6 @@ set_aliases
 install_fonts
 install_zsh_plugins
 install_ohmyzsh_plugins
-# set_ohmyzsh_theme "powerlevel10k/powerlevel10k"
 set_ohmyzsh_theme "agnoster"
 set_pyenv
+set_localbin_path
